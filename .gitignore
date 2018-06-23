@@ -1,0 +1,5 @@
+.DS_Store
+
+JDBCProjectForStudent/bin
+JDBCProjectTesting/bin
+JDBCProjectTesting/src/dbconfig.properties
