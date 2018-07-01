@@ -1,3 +1,15 @@
+/* NOTICE: All materials provided by this project, and materials derived 
+ * from the project, are the property of the University of Texas. 
+ * Project materials, or those derived from the materials, cannot be placed 
+ * into publicly accessible locations on the web. Project materials cannot 
+ * be shared with other project teams. Making project materials publicly 
+ * accessible, or sharing with other project teams will result in the 
+ * failure of the team responsible and any team that uses the shared materials. 
+ * Sharing project materials or using shared materials will also result 
+ * in the reporting of every team member to the Provost Office for academic 
+ * dishonesty. 
+ */ 
+
 package cs4347.jdbcProject.ecomm.testing;
 
 import java.io.IOException;
@@ -5,11 +17,12 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 /**
  * Application use the static method getDataSource() to obtain the singleton
@@ -21,10 +34,11 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
  */
 public class DataSourceManager {
 
-	private static MysqlDataSource singletonDS = null;
+	private static BasicDataSource singletonDS = null;
 
 	public synchronized static DataSource getDataSource() throws IOException {
 		if (singletonDS == null) {
+			System.out.println("Creating Datasource " + new Date());
 			Properties props = getPropertiesFromClasspath();
 
 			String url = props.getProperty("url");
@@ -42,9 +56,9 @@ public class DataSourceManager {
 				throw new RuntimeException("property 'passwd' not found in configuration file");
 			}
 
-			singletonDS = new MysqlDataSource();
-			singletonDS.setURL(url);
-			singletonDS.setUser(id);
+			singletonDS = new BasicDataSource();
+			singletonDS.setUrl(url);
+			singletonDS.setUsername(id);
 			singletonDS.setPassword(passwd);
 		}
 		return singletonDS;
@@ -67,15 +81,20 @@ public class DataSourceManager {
 	}
 
 	public static void main(String args[]) {
+		long startTime = System.currentTimeMillis();
 		try {
 			DataSource ds = DataSourceManager.getDataSource();
-			Connection con = ds.getConnection();
-			Statement stat = con.createStatement();
-			ResultSet rs = stat.executeQuery("select count(*) from simple_company.customer");
-			if (rs.next()) {
-				System.out.println("Count: " + rs.getInt(1));
+			for(int idx = 0; idx < 100; idx++) {				
+				Connection con = ds.getConnection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("select count(*) from simple_company.customer");
+				if (rs.next()) {
+					System.out.println(idx + " Count: " + rs.getInt(1));
+				}
+				stmt.close();
+				con.close();
 			}
-			System.out.println("Finished");
+			System.out.println("Finished " + (System.currentTimeMillis() - startTime));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

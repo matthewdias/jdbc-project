@@ -1,3 +1,15 @@
+/* NOTICE: All materials provided by this project, and materials derived 
+ * from the project, are the property of the University of Texas. 
+ * Project materials, or those derived from the materials, cannot be placed 
+ * into publicly accessible locations on the web. Project materials cannot 
+ * be shared with other project teams. Making project materials publicly 
+ * accessible, or sharing with other project teams will result in the 
+ * failure of the team responsible and any team that uses the shared materials. 
+ * Sharing project materials or using shared materials will also result 
+ * in the reporting of every team member to the Provost Office for academic 
+ * dishonesty. 
+ */ 
+
 package cs4347.jdbcProject.ecomm.unitTesting.dao;
 
 import static org.junit.Assert.*;
@@ -50,17 +62,25 @@ public class CreditcardDaoTest
 	{
 		DataSource ds = DataSourceManager.getDataSource();
 		Connection connection = ds.getConnection();
+		// Do not commit changes made by this test.
+		connection.setAutoCommit(false);
+		try {
+			CreditCardDAO dao = new CreditCardDaoImpl();
 
-		CreditCardDAO dao = new CreditCardDaoImpl();
+			CreditCard ccard = dao.retrieveForCustomerID(connection, customerID);
+			assertNotNull(ccard);
+			assertNotNull(ccard.getCcNumber());
+			assertNotNull(ccard.getExpDate());
+			assertNotNull(ccard.getName());
+			assertNotNull(ccard.getSecurityCode());
 
-		CreditCard ccard = dao.retrieveForCustomerID(connection, customerID);
-		assertNotNull(ccard);
-		assertNotNull(ccard.getCcNumber());
-		assertNotNull(ccard.getExpDate());
-		assertNotNull(ccard.getName());
-		assertNotNull(ccard.getSecurityCode());
-
-		connection.close();
+		}
+		finally {
+			// Do not commit changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	@Test
@@ -70,21 +90,24 @@ public class CreditcardDaoTest
 		Connection connection = ds.getConnection();
 		// Do not commit changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			CreditCardDAO dao = new CreditCardDaoImpl();
 
-		CreditCardDAO dao = new CreditCardDaoImpl();
+			CreditCard ccard = dao.retrieveForCustomerID(connection, customerID);
+			assertNotNull(ccard);
+			dao.deleteForCustomerID(connection, customerID);
+			CreditCard ccard2 = dao.retrieveForCustomerID(connection, customerID);
+			assertNull(ccard2);
 
-		CreditCard ccard = dao.retrieveForCustomerID(connection, customerID);
-		assertNotNull(ccard);
-		dao.deleteForCustomerID(connection, customerID);
-		CreditCard ccard2 = dao.retrieveForCustomerID(connection, customerID);
-		assertNull(ccard2);
-
-		// Do not commit changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+		}
+		finally {
+			// Do not commit changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
-	
+
 	/**
 	 * This test is expected to cause an SQLException when the added CreditCard
 	 * contains an invalid CustomerID.
@@ -112,7 +135,6 @@ public class CreditcardDaoTest
 			connection.close();
 		}
 	}
-
 
 	private CreditCard buildCreditcard()
 	{

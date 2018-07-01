@@ -1,3 +1,15 @@
+/* NOTICE: All materials provided by this project, and materials derived 
+ * from the project, are the property of the University of Texas. 
+ * Project materials, or those derived from the materials, cannot be placed 
+ * into publicly accessible locations on the web. Project materials cannot 
+ * be shared with other project teams. Making project materials publicly 
+ * accessible, or sharing with other project teams will result in the 
+ * failure of the team responsible and any team that uses the shared materials. 
+ * Sharing project materials or using shared materials will also result 
+ * in the reporting of every team member to the Provost Office for academic 
+ * dishonesty. 
+ */ 
+
 package cs4347.jdbcProject.ecomm.unitTesting.dao;
 
 import java.sql.Connection;
@@ -23,20 +35,23 @@ public class PurchaseDaoTest
 	Long customerID = 1l;
 	// Need current product ID from table PRODUCT
 	Long productID = 1l;
-	
+
 	@Test
 	public void testRetrieveForCustID() throws Exception
 	{
 		DataSource dataSource = DataSourceManager.getDataSource();
 		Connection connection = dataSource.getConnection();
-		PurchaseDAO pdao = new PurchaseDaoImpl();
-		
-		List<Purchase> purchases = pdao.retrieveForCustomerID(connection, customerID);
-		assertTrue(purchases.size() >= 1);
+		try {
+			PurchaseDAO pdao = new PurchaseDaoImpl();
 
-		connection.close();
+			List<Purchase> purchases = pdao.retrieveForCustomerID(connection, customerID);
+			assertTrue(purchases.size() >= 1);
+		}
+		finally {
+			connection.close();
+		}
 	}
-	
+
 	@Test
 	public void testCreatePurchase() throws Exception
 	{
@@ -44,20 +59,22 @@ public class PurchaseDaoTest
 		Connection connection = dataSource.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			PurchaseDAO pdao = new PurchaseDaoImpl();
 
-		PurchaseDAO pdao = new PurchaseDaoImpl();
-		
-		Purchase purchase = buildPurchase(customerID, productID);
-		assertNull(purchase.getId());
-		Purchase purchase2 = pdao.create(connection, purchase);
-		assertNotNull(purchase2.getId());
-
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			Purchase purchase = buildPurchase(customerID, productID);
+			assertNull(purchase.getId());
+			Purchase purchase2 = pdao.create(connection, purchase);
+			assertNotNull(purchase2.getId());
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
-	
+
 	@Test
 	public void testUpdatePurchase() throws Exception
 	{
@@ -65,42 +82,47 @@ public class PurchaseDaoTest
 		Connection connection = dataSource.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			PurchaseDAO pdao = new PurchaseDaoImpl();
 
-		PurchaseDAO pdao = new PurchaseDaoImpl();
-		
-		Purchase purchase = buildPurchase(customerID, productID);
-		Purchase purchase2 = pdao.create(connection, purchase);
-		purchase2.setPurchaseAmount(123.0);
-		pdao.update(connection, purchase2);
-		Purchase purchase3 = pdao.retrieve(connection, purchase2.getId());
-		assertEquals(123.0, purchase3.getPurchaseAmount(), 0);
-
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			Purchase purchase = buildPurchase(customerID, productID);
+			Purchase purchase2 = pdao.create(connection, purchase);
+			purchase2.setPurchaseAmount(123.0);
+			pdao.update(connection, purchase2);
+			Purchase purchase3 = pdao.retrieve(connection, purchase2.getId());
+			assertEquals(123.0, purchase3.getPurchaseAmount(), 0);
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
-	
+
 	@Test
 	public void testPurchaseSummary() throws Exception
 	{
 		DataSource dataSource = DataSourceManager.getDataSource();
 		Connection connection = dataSource.getConnection();
-		PurchaseDAO pdao = new PurchaseDaoImpl();
-		
-		PurchaseSummary psummary = pdao.retrievePurchaseSummary(connection, customerID);
-		assertTrue(psummary.minPurchase >= 0);
-		assertTrue(psummary.maxPurchase > 0);
-		assertTrue(psummary.avgPurchase > 0);
+		try {
+			PurchaseDAO pdao = new PurchaseDaoImpl();
 
-		connection.close();
+			PurchaseSummary psummary = pdao.retrievePurchaseSummary(connection, customerID);
+			assertTrue(psummary.minPurchase >= 0);
+			assertTrue(psummary.maxPurchase > 0);
+			assertTrue(psummary.avgPurchase > 0);
+		}
+		finally {
+			connection.close();
+		}
 	}
 
 	Random rng = new Random();
-	
+
 	/**
-	 * This test is expected to cause an SQLException when the 
-	 * added Purchase contains an invalid CustomerID.
+	 * This test is expected to cause an SQLException when the added Purchase
+	 * contains an invalid CustomerID.
 	 */
 	@Test(expected = SQLException.class)
 	public void testCreateForeignKeyCust() throws Exception
@@ -109,24 +131,26 @@ public class PurchaseDaoTest
 		Connection connection = dataSource.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			PurchaseDAO pdao = new PurchaseDaoImpl();
 
-		PurchaseDAO pdao = new PurchaseDaoImpl();
-		
-		// This Customer ID cannot be in the DBMS
-		Purchase purchase = buildPurchase(9999l, productID);
-		assertNull(purchase.getId());
-		Purchase purchase2 = pdao.create(connection, purchase);
-		assertNotNull(purchase2.getId());
-
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			// This Customer ID cannot be in the DBMS
+			Purchase purchase = buildPurchase(9999l, productID);
+			assertNull(purchase.getId());
+			Purchase purchase2 = pdao.create(connection, purchase);
+			assertNotNull(purchase2.getId());
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
-	
+
 	/**
-	 * This test is expected to cause an SQLException when the 
-	 * added Purchase contains an invalid ProductID.
+	 * This test is expected to cause an SQLException when the added Purchase
+	 * contains an invalid ProductID.
 	 */
 	@Test(expected = SQLException.class)
 	public void testCreateForeignKeyProd() throws Exception
@@ -135,21 +159,23 @@ public class PurchaseDaoTest
 		Connection connection = dataSource.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			PurchaseDAO pdao = new PurchaseDaoImpl();
 
-		PurchaseDAO pdao = new PurchaseDaoImpl();
-		
-		// This Product ID cannot be in the DBMS
-		Purchase purchase = buildPurchase(customerID, 9999l);
-		assertNull(purchase.getId());
-		Purchase purchase2 = pdao.create(connection, purchase);
-		assertNotNull(purchase2.getId());
-
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			// This Product ID cannot be in the DBMS
+			Purchase purchase = buildPurchase(customerID, 9999l);
+			assertNull(purchase.getId());
+			Purchase purchase2 = pdao.create(connection, purchase);
+			assertNotNull(purchase2.getId());
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
-	
+
 	Purchase buildPurchase(Long customerID, Long productID)
 	{
 		Purchase result = new Purchase();

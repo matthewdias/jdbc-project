@@ -1,3 +1,15 @@
+/* NOTICE: All materials provided by this project, and materials derived 
+ * from the project, are the property of the University of Texas. 
+ * Project materials, or those derived from the materials, cannot be placed 
+ * into publicly accessible locations on the web. Project materials cannot 
+ * be shared with other project teams. Making project materials publicly 
+ * accessible, or sharing with other project teams will result in the 
+ * failure of the team responsible and any team that uses the shared materials. 
+ * Sharing project materials or using shared materials will also result 
+ * in the reporting of every team member to the Provost Office for academic 
+ * dishonesty. 
+ */ 
+
 package cs4347.jdbcProject.ecomm.unitTesting.dao;
 
 import static org.junit.Assert.*;
@@ -47,17 +59,25 @@ public class AddressDaoTest
 	{
 		DataSource ds = DataSourceManager.getDataSource();
 		Connection connection = ds.getConnection();
+		// Do not commit changes made by this test.
+		connection.setAutoCommit(false);
+		try {
+			AddressDAO dao = new AddressDaoImpl();
 
-		AddressDAO dao = new AddressDaoImpl();
+			Address addr = dao.retrieveForCustomerID(connection, customerID);
+			assertNotNull(addr);
+			assertNotNull(addr.getAddress1());
+			assertNotNull(addr.getCity());
+			assertNotNull(addr.getState());
+			assertNotNull(addr.getZipcode());
 
-		Address addr = dao.retrieveForCustomerID(connection, customerID);
-		assertNotNull(addr);
-		assertNotNull(addr.getAddress1());
-		assertNotNull(addr.getCity());
-		assertNotNull(addr.getState());
-		assertNotNull(addr.getZipcode());
-
-		connection.close();
+		}
+		finally {
+			// Do not commit changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	@Test

@@ -1,3 +1,15 @@
+/* NOTICE: All materials provided by this project, and materials derived 
+ * from the project, are the property of the University of Texas. 
+ * Project materials, or those derived from the materials, cannot be placed 
+ * into publicly accessible locations on the web. Project materials cannot 
+ * be shared with other project teams. Making project materials publicly 
+ * accessible, or sharing with other project teams will result in the 
+ * failure of the team responsible and any team that uses the shared materials. 
+ * Sharing project materials or using shared materials will also result 
+ * in the reporting of every team member to the Provost Office for academic 
+ * dishonesty. 
+ */ 
+
 package cs4347.jdbcProject.ecomm.unitTesting.dao;
 
 import static org.junit.Assert.*;
@@ -28,43 +40,50 @@ public class ProductDaoTest
 		Connection connection = ds.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			Product prod = buildProduct();
+			ProductDAO dao = new ProductDaoImpl();
 
-		Product prod = buildProduct();
-		ProductDAO dao = new ProductDaoImpl();
-		
-		Product prod2 = dao.create(connection, prod);
-		assertNotNull(prod2);
-		assertNotNull(prod2.getId());
-		System.out.println("Generated Key: " + prod2.getId());
+			Product prod2 = dao.create(connection, prod);
+			assertNotNull(prod2);
+			assertNotNull(prod2.getId());
+			System.out.println("Generated Key: " + prod2.getId());
 
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	/**
-	 * Test a failed creation due to attempting to insert a 
-	 * Product with a non=null ID. Expects to catch DAOException. 
+	 * Test a failed creation due to attempting to insert a Product with a
+	 * non=null ID. Expects to catch DAOException.
 	 */
-	@Test (expected=DAOException.class)
+	@Test(expected = DAOException.class)
 	public void testCreateFailed() throws Exception
 	{
 		DataSource ds = DataSourceManager.getDataSource();
 		Connection connection = ds.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
-		
-		ProductDAO dao = new ProductDaoImpl();
+		try {
+			ProductDAO dao = new ProductDaoImpl();
 
-		Product prod = buildProduct();
-		prod.setId(System.currentTimeMillis()); // This will cause the create to fail
-		dao.create(connection, prod);
+			Product prod = buildProduct();
+			// This will cause the create to fail
+			prod.setId(System.currentTimeMillis());
+			dao.create(connection, prod);
 
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	@Test
@@ -72,21 +91,24 @@ public class ProductDaoTest
 	{
 		DataSource ds = DataSourceManager.getDataSource();
 		Connection connection = ds.getConnection();
-		Product prod = buildProduct();
-		ProductDAO dao = new ProductDaoImpl();
-		
-		Product prod2 = dao.create(connection, prod);
-		Long id = prod2.getId();
-		
-		Product prod3 = dao.retrieve(connection, id);
-		assertNotNull(prod3);
-		assertEquals(prod2.getId(), prod3.getId());
-		assertEquals(prod2.getProdName(), prod3.getProdName());
-		assertEquals(prod2.getProdDescription(), prod3.getProdDescription());
-		assertEquals(prod2.getProdCategory(), prod3.getProdCategory());
-		assertEquals(prod2.getProdUPC(), prod3.getProdUPC());
+		try {
+			Product prod = buildProduct();
+			ProductDAO dao = new ProductDaoImpl();
 
-		connection.close();
+			Product prod2 = dao.create(connection, prod);
+			Long id = prod2.getId();
+
+			Product prod3 = dao.retrieve(connection, id);
+			assertNotNull(prod3);
+			assertEquals(prod2.getId(), prod3.getId());
+			assertEquals(prod2.getProdName(), prod3.getProdName());
+			assertEquals(prod2.getProdDescription(), prod3.getProdDescription());
+			assertEquals(prod2.getProdCategory(), prod3.getProdCategory());
+			assertEquals(prod2.getProdUPC(), prod3.getProdUPC());
+		}
+		finally {
+			connection.close();
+		}
 	}
 
 	@Test
@@ -94,15 +116,18 @@ public class ProductDaoTest
 	{
 		DataSource ds = DataSourceManager.getDataSource();
 		Connection connection = ds.getConnection();
-		ProductDAO dao = new ProductDaoImpl();
+		try {
+			ProductDAO dao = new ProductDaoImpl();
 
-		Long id = System.currentTimeMillis();
-		Product prod = dao.retrieve(connection, id);
-		assertNull(prod);
-
-		connection.close();
+			Long id = System.currentTimeMillis();
+			Product prod = dao.retrieve(connection, id);
+			assertNull(prod);
+		}
+		finally {
+			connection.close();
+		}
 	}
-	
+
 	@Test
 	public void testUpdate() throws Exception
 	{
@@ -110,25 +135,27 @@ public class ProductDaoTest
 		Connection connection = ds.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			Product prod = buildProduct();
+			ProductDAO dao = new ProductDaoImpl();
 
-		Product prod = buildProduct();
-		ProductDAO dao = new ProductDaoImpl();
-		
-		Product prod2 = dao.create(connection, prod);
-		Long id = prod2.getId();
-		
-		String newUPC = genUPC();
-		prod2.setProdUPC(newUPC);
-		int rows = dao.update(connection, prod2);
-		assertEquals(1, rows);
-		
-		Product prod3 = dao.retrieve(connection, id);
-		assertEquals(newUPC, prod3.getProdUPC());
+			Product prod2 = dao.create(connection, prod);
+			Long id = prod2.getId();
 
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			String newUPC = genUPC();
+			prod2.setProdUPC(newUPC);
+			int rows = dao.update(connection, prod2);
+			assertEquals(1, rows);
+
+			Product prod3 = dao.retrieve(connection, id);
+			assertEquals(newUPC, prod3.getProdUPC());
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	@Test
@@ -138,25 +165,27 @@ public class ProductDaoTest
 		Connection connection = ds.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
+		try {
+			Product prod = buildProduct();
+			ProductDAO dao = new ProductDaoImpl();
 
-		Product prod = buildProduct();
-		ProductDAO dao = new ProductDaoImpl();
-		
-		Product prod2 = dao.create(connection, prod);
-		Long id = prod2.getId();
-		
-		int rows = dao.delete(connection, id);
-		assertEquals(1, rows);
+			Product prod2 = dao.create(connection, prod);
+			Long id = prod2.getId();
 
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			int rows = dao.delete(connection, id);
+			assertEquals(1, rows);
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	/**
-	 * Tests deleting a product and associated purchases. 
-	 * NOTE: This test assumes that the cascade delete option was set on the foreign key.
+	 * Tests deleting a product and associated purchases. NOTE: This test
+	 * assumes that the cascade delete option was set on the foreign key.
 	 */
 	@Test
 	public void testDelete2() throws Exception
@@ -167,47 +196,53 @@ public class ProductDaoTest
 		Connection connection = ds.getConnection();
 		// Do not commit any changes made by this test.
 		connection.setAutoCommit(false);
-		
-		ProductDAO prodDao = new ProductDaoImpl();
-		PurchaseDAO purcDao = new PurchaseDaoImpl();
-		
-		Product prod1 = prodDao.retrieve(connection, prodID);
-		assertNotNull(prod1);
-		
-		List<Purchase> purchases = purcDao.retrieveForProductID(connection, prodID);
-		assertTrue(purchases.size() > 1);
-		
-		int rows = prodDao.delete(connection, prodID);
-		assertEquals(1, rows);
+		try {
+			ProductDAO prodDao = new ProductDaoImpl();
+			PurchaseDAO purcDao = new PurchaseDaoImpl();
 
-		prod1 = prodDao.retrieve(connection, prodID);
-		assertNull(prod1);
-		
-		// Assumes Cascade Delete
-		purchases = purcDao.retrieveForProductID(connection, prodID);
-		assertTrue(purchases.size() == 0);
+			Product prod1 = prodDao.retrieve(connection, prodID);
+			assertNotNull(prod1);
 
-		// Do not commit any changes made by this test.
-		connection.rollback();
-		connection.setAutoCommit(true);
-		connection.close();
+			List<Purchase> purchases = purcDao.retrieveForProductID(connection, prodID);
+			assertTrue(purchases.size() > 1);
+
+			int rows = prodDao.delete(connection, prodID);
+			assertEquals(1, rows);
+
+			prod1 = prodDao.retrieve(connection, prodID);
+			assertNull(prod1);
+
+			// Assumes Cascade Delete
+			purchases = purcDao.retrieveForProductID(connection, prodID);
+			assertTrue(purchases.size() == 0);
+		}
+		finally {
+			// Do not commit any changes made by this test.
+			connection.rollback();
+			connection.setAutoCommit(true);
+			connection.close();
+		}
 	}
 
 	@Test
-	public void testRetrieveByCategory() throws Exception 
+	public void testRetrieveByCategory() throws Exception
 	{
 		DataSource ds = DataSourceManager.getDataSource();
 		Connection connection = ds.getConnection();
-		ProductDAO prodDao = new ProductDaoImpl();
-		
-		List<Product> products = prodDao.retrieveByCategory(connection, 7); // 0-9
-		assertTrue(products.size() > 0);
+		try {
+			ProductDAO prodDao = new ProductDaoImpl();
 
-		connection.close();
+			List<Product> products = prodDao.retrieveByCategory(connection, 7); // 0-9
+			assertTrue(products.size() > 0);
+		}
+		finally {
+			connection.close();
+		}
 	}
-	
-	private Product buildProduct() {
-	
+
+	private Product buildProduct()
+	{
+
 		Product result = new Product();
 		result.setProdName("ProductXYZ");
 		result.setProdDescription("ProductXYZ Description");
@@ -220,10 +255,10 @@ public class ProductDaoTest
 	{
 		Random random = new Random();
 		StringBuilder sb = new StringBuilder();
-		for(int idx = 0; idx < 12; idx++) {
+		for (int idx = 0; idx < 12; idx++) {
 			sb.append(random.nextInt(10));
 		}
 		return sb.toString();
 	}
-	
+
 }
