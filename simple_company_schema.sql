@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `simple_company`.`credit_card` (
   CONSTRAINT `fk_CreditCard_Customer1`
     FOREIGN KEY (`customer_id`)
     REFERENCES `simple_company`.`customer` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `simple_company`.`address` (
   CONSTRAINT `fk_Address_Customer1`
     FOREIGN KEY (`customer_id`)
     REFERENCES `simple_company`.`customer` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -100,12 +100,12 @@ CREATE TABLE IF NOT EXISTS `simple_company`.`purchase` (
   CONSTRAINT `fk_Purchase_Customer`
     FOREIGN KEY (`customer_id`)
     REFERENCES `simple_company`.`customer` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Purchase_Product1`
     FOREIGN KEY (`product_id`)
     REFERENCES `simple_company`.`product` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
