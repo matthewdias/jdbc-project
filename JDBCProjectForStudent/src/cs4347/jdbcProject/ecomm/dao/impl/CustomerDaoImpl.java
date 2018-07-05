@@ -23,7 +23,7 @@ public class CustomerDaoImpl implements CustomerDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"INSERT INTO customer (first_name, last_name, gender, dob, email)"
+				"INSERT INTO customer (first_name, last_name, gender, dob, email) "
 				+ "VALUES (?, ?, ?, ?, ?);",
 				Statement.RETURN_GENERATED_KEYS
 			);
@@ -59,8 +59,8 @@ public class CustomerDaoImpl implements CustomerDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT first_name, last_name, gender, dob, email"
-				+ "FROM customer"
+				"SELECT first_name, last_name, gender, dob, email "
+				+ "FROM customer "
 				+ "WHERE id = ?;"
 			);
 			statement.setLong(1, id);
@@ -96,8 +96,8 @@ public class CustomerDaoImpl implements CustomerDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"UPDATE customer"
-				+ "SET first_name = ?, last_name = ?, gender = ?, dob = ?, email = ?"
+				"UPDATE customer "
+				+ "SET first_name = ?, last_name = ?, gender = ?, dob = ?, email = ? "
 				+ "WHERE id = ?;"
 			);
 			statement.setString(1, customer.getFirstName());
@@ -128,7 +128,7 @@ public class CustomerDaoImpl implements CustomerDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"DELETE FROM customer"
+				"DELETE FROM customer "
 				+ "WHERE id = ?;"
 			);
 			statement.setLong(1, id);
@@ -150,9 +150,9 @@ public class CustomerDaoImpl implements CustomerDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT customer.id, customer.first_name, customer.last_name, customer.gender, customer.dob, customer.email"
-				+ "FROM customer, address"
-				+ "WHERE customer.id = address.customer_id"
+				"SELECT customer.id, customer.first_name, customer.last_name, customer.gender, customer.dob, customer.email "
+				+ "FROM customer, address "
+				+ "WHERE customer.id = address.customer_id "
 				+ "AND address.zipcode = ?;"
 			);
 			statement.setString(1, zipCode);
@@ -187,8 +187,8 @@ public class CustomerDaoImpl implements CustomerDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT id, first_name, last_name, gender, dob, email"
-				+ "FROM customer"
+				"SELECT id, first_name, last_name, gender, dob, email "
+				+ "FROM customer "
 				+ "WHERE dob BETWEEN ? AND ?;"
 			);
 			statement.setDate(1, startDate);

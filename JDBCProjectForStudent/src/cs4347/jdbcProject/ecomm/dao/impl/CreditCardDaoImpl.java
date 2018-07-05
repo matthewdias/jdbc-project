@@ -16,7 +16,7 @@ public class CreditCardDaoImpl implements CreditCardDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"INSERT INTO credit_card (name, cc_number, exp_date, security_code, customer_id)"
+				"INSERT INTO credit_card (name, cc_number, exp_date, security_code, customer_id) "
 				+ "VALUES (?, ?, ?, ?, ?);"
 			);
 			statement.setString(1, creditCard.getName());
@@ -42,8 +42,8 @@ public class CreditCardDaoImpl implements CreditCardDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT name, cc_number, exp_date, security_code"
-				+ "FROM credit_card"
+				"SELECT name, cc_number, exp_date, security_code "
+				+ "FROM credit_card "
 				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
@@ -73,7 +73,7 @@ public class CreditCardDaoImpl implements CreditCardDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"DELETE FROM creditCard"
+				"DELETE FROM credit_card "
 				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);

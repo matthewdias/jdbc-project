@@ -15,7 +15,7 @@ public class AddressDaoImpl implements AddressDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"INSERT INTO address (address1, address2, city, state, zipcode, customer_id)"
+				"INSERT INTO address (address1, address2, city, state, zipcode, customer_id) "
 				+ "VALUES (?, ?, ?, ?, ?, ?);"
 			);
 			statement.setString(1, address.getAddress1());
@@ -43,7 +43,7 @@ public class AddressDaoImpl implements AddressDAO
 		try {
 			statement = connection.prepareStatement(
 				"SELECT address1, address2, city, state, zipcode "
-				+ "FROM address"
+				+ "FROM address "
 				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
@@ -74,7 +74,7 @@ public class AddressDaoImpl implements AddressDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"DELETE FROM address"
+				"DELETE FROM address "
 				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
