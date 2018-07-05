@@ -44,7 +44,7 @@ public class AddressDaoImpl implements AddressDAO
 			statement = connection.prepareStatement(
 				"SELECT address1, address2, city, state, zipcode "
 				+ "FROM address"
-				+ "WHERE customer_id = ?"
+				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
 			
@@ -75,7 +75,7 @@ public class AddressDaoImpl implements AddressDAO
 		try {
 			statement = connection.prepareStatement(
 				"DELETE FROM address"
-				+ "WHERE customer_id = ?"
+				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
 			

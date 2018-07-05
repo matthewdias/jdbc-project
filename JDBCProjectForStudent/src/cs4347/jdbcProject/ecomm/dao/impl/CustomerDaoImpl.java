@@ -61,7 +61,7 @@ public class CustomerDaoImpl implements CustomerDAO
 			statement = connection.prepareStatement(
 				"SELECT first_name, last_name, gender, dob, email"
 				+ "FROM customer"
-				+ "WHERE id = ?"
+				+ "WHERE id = ?;"
 			);
 			statement.setLong(1, id);
 			
@@ -98,7 +98,7 @@ public class CustomerDaoImpl implements CustomerDAO
 			statement = connection.prepareStatement(
 				"UPDATE customer"
 				+ "SET first_name = ?, last_name = ?, gender = ?, dob = ?, email = ?"
-				+ "WHERE id = ?"
+				+ "WHERE id = ?;"
 			);
 			statement.setString(1, customer.getFirstName());
 			statement.setString(2, customer.getLastName());
@@ -129,7 +129,7 @@ public class CustomerDaoImpl implements CustomerDAO
 		try {
 			statement = connection.prepareStatement(
 				"DELETE FROM customer"
-				+ "WHERE id = ?"
+				+ "WHERE id = ?;"
 			);
 			statement.setLong(1, id);
 			
@@ -153,7 +153,7 @@ public class CustomerDaoImpl implements CustomerDAO
 				"SELECT customer.id, customer.first_name, customer.last_name, customer.gender, customer.dob, customer.email"
 				+ "FROM customer, address"
 				+ "WHERE customer.id = address.customer_id"
-				+ "AND address.zipcode = ?"
+				+ "AND address.zipcode = ?;"
 			);
 			statement.setString(1, zipCode);
 			
@@ -189,7 +189,7 @@ public class CustomerDaoImpl implements CustomerDAO
 			statement = connection.prepareStatement(
 				"SELECT id, first_name, last_name, gender, dob, email"
 				+ "FROM customer"
-				+ "WHERE dob BETWEEN ? AND ?"
+				+ "WHERE dob BETWEEN ? AND ?;"
 			);
 			statement.setDate(1, startDate);
 			statement.setDate(2, endDate);

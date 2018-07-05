@@ -44,7 +44,7 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			statement = connection.prepareStatement(
 				"SELECT name, cc_number, exp_date, security_code"
 				+ "FROM credit_card"
-				+ "WHERE customer_id = ?"
+				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
 			
@@ -74,7 +74,7 @@ public class CreditCardDaoImpl implements CreditCardDAO
 		try {
 			statement = connection.prepareStatement(
 				"DELETE FROM creditCard"
-				+ "WHERE customer_id = ?"
+				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
 			
