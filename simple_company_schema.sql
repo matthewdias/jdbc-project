@@ -21,7 +21,7 @@ USE `simple_company` ;
 -- Table `simple_company`.`customer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `simple_company`.`customer` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `gender` CHAR(1) NOT NULL,
@@ -35,7 +35,7 @@ ENGINE = InnoDB;
 -- Table `simple_company`.`credit_card`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `simple_company`.`credit_card` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `cc_number` VARCHAR(45) NOT NULL,
   `exp_date` VARCHAR(45) NOT NULL,
@@ -55,7 +55,7 @@ ENGINE = InnoDB;
 -- Table `simple_company`.`address`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `simple_company`.`address` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `address1` VARCHAR(45) NOT NULL,
   `address2` VARCHAR(45) NULL,
   `city` VARCHAR(45) NOT NULL,
@@ -76,7 +76,7 @@ ENGINE = InnoDB;
 -- Table `simple_company`.`product`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `simple_company`.`product` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `prod_name` VARCHAR(45) NOT NULL,
   `prod_description` VARCHAR(1024) NOT NULL,
   `prod_category` INT NOT NULL,
@@ -89,7 +89,7 @@ ENGINE = InnoDB;
 -- Table `simple_company`.`purchase`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `simple_company`.`purchase` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `purchase_date` TIMESTAMP(3) NOT NULL,
   `purchase_amount` DECIMAL(9,2) NOT NULL,
   `customer_id` INT NOT NULL,
