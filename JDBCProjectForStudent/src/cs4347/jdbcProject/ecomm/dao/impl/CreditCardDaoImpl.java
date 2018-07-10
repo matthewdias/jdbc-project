@@ -32,9 +32,6 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -66,9 +63,6 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -86,9 +80,6 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 }

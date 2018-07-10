@@ -45,9 +45,6 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -85,9 +82,6 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -117,9 +111,6 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -143,9 +134,6 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -180,9 +168,6 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -217,9 +202,6 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 }

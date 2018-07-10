@@ -32,9 +32,6 @@ public class AddressDaoImpl implements AddressDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -67,9 +64,6 @@ public class AddressDaoImpl implements AddressDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 	
@@ -87,9 +81,6 @@ public class AddressDaoImpl implements AddressDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-//			if (connection != null && !connection.isClosed()) {
-//				connection.close();
-//			}
 		}
 	}
 }
