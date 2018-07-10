@@ -157,20 +157,9 @@ public class CustomerPersistenceServiceImpl implements CustomerPersistenceServic
 
 		Connection connection = dataSource.getConnection();
 		try {
-			connection.setAutoCommit(false);
-			int rows = customerDAO.delete(connection, id);
-
-			connection.commit();
-			return rows;
-		}
-		catch (Exception ex) {
-			connection.rollback();
-			throw ex;
+			return customerDAO.delete(connection, id);
 		}
 		finally {
-			if (connection != null) {
-				connection.setAutoCommit(true);
-			}
 			if (connection != null && !connection.isClosed()) {
 				connection.close();
 			}
