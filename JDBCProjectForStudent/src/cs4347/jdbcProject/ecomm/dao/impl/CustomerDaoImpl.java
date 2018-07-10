@@ -45,9 +45,9 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -67,24 +67,27 @@ public class CustomerDaoImpl implements CustomerDAO
 			
 			statement.executeQuery();
 			ResultSet result = statement.getResultSet();
-			result.next();
 			
-			Customer customer = new Customer();
-			customer.setId(id);
-			customer.setFirstName(result.getString(1));
-			customer.setLastName(result.getString(2));
-			customer.setGender(result.getString(3).charAt(0));
-			customer.setDob(result.getDate(4));
-			customer.setEmail(result.getString(5));
+			if (result.next()) {
+				Customer customer = new Customer();
+				customer.setId(id);
+				customer.setFirstName(result.getString(1));
+				customer.setLastName(result.getString(2));
+				customer.setGender(result.getString(3).charAt(0));
+				customer.setDob(result.getDate(4));
+				customer.setEmail(result.getString(5));
+				
+				return customer;
+			}
 			
-			return customer;
+			return null;
 		} finally {
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -114,15 +117,15 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
 	public int delete(Connection connection, Long id) throws SQLException, DAOException {
 		if (id == null) {
-			throw new DAOException("Trying to update Customer with NULL ID");
+			throw new DAOException("Trying to delete Customer with NULL ID");
 		}
 		
 		PreparedStatement statement = null;
@@ -140,9 +143,9 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -177,9 +180,9 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -214,9 +217,9 @@ public class CustomerDaoImpl implements CustomerDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 }

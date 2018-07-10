@@ -32,9 +32,9 @@ public class AddressDaoImpl implements AddressDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -50,23 +50,26 @@ public class AddressDaoImpl implements AddressDAO
 			
 			statement.executeQuery();
 			ResultSet result = statement.getResultSet();
-			result.next();
 			
-			Address address = new Address();
-			address.setAddress1(result.getString(1));
-			address.setAddress2(result.getString(2));
-			address.setCity(result.getString(3));
-			address.setState(result.getString(4));
-			address.setZipcode(result.getString(5));
+			if (result.next()) {
+				Address address = new Address();
+				address.setAddress1(result.getString(1));
+				address.setAddress2(result.getString(2));
+				address.setCity(result.getString(3));
+				address.setState(result.getString(4));
+				address.setZipcode(result.getString(5));
 			
-			return address;
+				return address;
+			}
+			
+			return null;
 		} finally {
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -84,9 +87,9 @@ public class AddressDaoImpl implements AddressDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 }

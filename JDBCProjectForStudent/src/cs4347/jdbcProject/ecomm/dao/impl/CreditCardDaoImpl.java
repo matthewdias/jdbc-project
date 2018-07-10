@@ -24,7 +24,7 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			statement.setString(3, creditCard.getExpDate());
 			statement.setString(4, creditCard.getSecurityCode());
 			statement.setLong(5, customerID);
-			
+			System.out.println(customerID);
 			statement.executeUpdate();
 			
 			return creditCard;
@@ -32,9 +32,9 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -50,22 +50,25 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			
 			statement.executeQuery();
 			ResultSet result = statement.getResultSet();
-			result.next();
 			
-			CreditCard creditCard = new CreditCard();
-			creditCard.setName(result.getString(1));
-			creditCard.setCcNumber(result.getString(2));
-			creditCard.setExpDate(result.getString(3));
-			creditCard.setSecurityCode(result.getString(4));
+			if (result.next()) {
+				CreditCard creditCard = new CreditCard();
+				creditCard.setName(result.getString(1));
+				creditCard.setCcNumber(result.getString(2));
+				creditCard.setExpDate(result.getString(3));
+				creditCard.setSecurityCode(result.getString(4));
 			
-			return creditCard;
+				return creditCard;
+			}
+			
+			return null;
 		} finally {
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 	
@@ -83,9 +86,9 @@ public class CreditCardDaoImpl implements CreditCardDAO
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
 			}
-			if (connection != null && !connection.isClosed()) {
-				connection.close();
-			}
+//			if (connection != null && !connection.isClosed()) {
+//				connection.close();
+//			}
 		}
 	}
 }
