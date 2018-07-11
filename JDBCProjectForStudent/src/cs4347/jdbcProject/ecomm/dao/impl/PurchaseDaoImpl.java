@@ -57,8 +57,8 @@ public class PurchaseDaoImpl implements PurchaseDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT purchase_amount, purchase_date "
-				+ "FROM customer "
+				"SELECT purchase_amount, purchase_date, product_id, customer_id "
+				+ "FROM purchase "
 				+ "WHERE id = ?;"
 			);
 			statement.setLong(1, id);
@@ -71,6 +71,8 @@ public class PurchaseDaoImpl implements PurchaseDAO
 				purchase.setId(id);
 				purchase.setPurchaseAmount(result.getDouble(1));
 				purchase.setPurchaseDate(result.getDate(2));
+				purchase.setProductID(result.getLong(3));
+				purchase.setCustomerID(result.getLong(4));
 				
 				return purchase;
 			}
@@ -94,12 +96,14 @@ public class PurchaseDaoImpl implements PurchaseDAO
 		try {
 			statement = connection.prepareStatement(
 				"UPDATE purchase "
-				+ "SET purchase_amount = ?, purchase_date = ? "
+				+ "SET purchase_amount = ?, purchase_date = ?, product_id = ?, customer_id = ? "
 				+ "WHERE id = ?;"
 			);
 			statement.setDouble(1, purchase.getPurchaseAmount());
 			statement.setDate(2, purchase.getPurchaseDate());
-			statement.setLong(6, purchase.getId());
+			statement.setLong(3, purchase.getProductID());
+			statement.setLong(4, purchase.getCustomerID());
+			statement.setLong(5, purchase.getId());
 		
 			int rows = statement.executeUpdate();
 		
@@ -140,10 +144,9 @@ public class PurchaseDaoImpl implements PurchaseDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT purchase.purchase_amount, purchase.purchase_date "
+				"SELECT id, purchase_amount, purchase_date, product_id, customer_id "
 				+ "FROM purchase "
-				+ "WHERE purchase.customer_id = ?;"
-		
+				+ "WHERE customer_id = ?;"
 			);
 			statement.setLong(1, customerID);
 			
@@ -156,11 +159,13 @@ public class PurchaseDaoImpl implements PurchaseDAO
 				purchase.setId((long)result.getInt(1));
 				purchase.setPurchaseAmount(result.getDouble(2));
 				purchase.setPurchaseDate(result.getDate(3));
+				purchase.setProductID(result.getLong(4));
+				purchase.setCustomerID(result.getLong(5));
 				
 				purchases.add(purchase);
 			}
 			
-			return purchases ;
+			return purchases;
 		} finally {
 			if (statement != null && !statement.isClosed()) {
 				statement.close();
@@ -173,9 +178,9 @@ public class PurchaseDaoImpl implements PurchaseDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT purchase.purchase_amount, purchase.purchase_date "
-				+ "FROM product, purchase "
-				+ "WHERE product.id = purchase.product_id;"
+				"SELECT id, purchase_amount, purchase_date, product_id, customer_id "
+				+ "FROM purchase "
+				+ "WHERE product_id = ?;"
 			);
 			statement.setLong(1, productID);
 			
@@ -188,6 +193,8 @@ public class PurchaseDaoImpl implements PurchaseDAO
 				purchase.setId((long)result.getInt(1));
 				purchase.setPurchaseAmount(result.getDouble(2));
 				purchase.setPurchaseDate(result.getDate(3));
+				purchase.setProductID(result.getLong(4));
+				purchase.setCustomerID(result.getLong(5));
 				
 				purchases.add(purchase);
 			}
@@ -205,10 +212,10 @@ public class PurchaseDaoImpl implements PurchaseDAO
 		PreparedStatement statement = null;
 		try {
 			statement = connection.prepareStatement(
-				"SELECT min(purchase.purchase_amount), max(purchase.purchase_amount), avg(purchase.purchase_amount) "
-				+ "FROM purchase"
-				+ "WHERE purchase.customer_id = ? "
-				+ "group by purchase.customer_id;"
+				"SELECT MIN(purchase_amount), MAX(purchase_amount), AVG(purchase_amount) "
+				+ "FROM purchase "
+				+ "GROUP BY customer_id "
+				+ "HAVING customer_id = ?"
 			);
 			statement.setLong(1,customerID);
 			
